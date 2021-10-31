@@ -37,7 +37,7 @@ def upload(event, context):
     url, blob_id = generate_presigned_url(bucket, region)
 
     # response body
-    body = {"url": url,
+    body = {"upload_url": url,
             "blob_id": blob_id}
 
     return {"statusCode": 200,

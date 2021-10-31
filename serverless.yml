@@ -73,7 +73,7 @@ functions:
     handler: functions/get_labels.get_labels
     events:
       - http:
-          path: /blobs/{blob_id}
+          path: /blobs/get/{blob_id}
           method: get
           cors: true
   
