@@ -3,6 +3,7 @@
 
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)  [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![Awesome](https://awesome.re/badge.svg)](https://github.com/kfrawee/)
 
+<<<<<<< HEAD
 --- 
 
 ## Overview:
@@ -32,3 +33,6 @@ This project uses [`serverless`](https://www.serverless.com/) framework ⚡. So,
 ```sh
 $ serverless deploy
 ```
+=======
+WIP
+>>>>>>> 401fa7b4833cf0641e0c19e1f0dc5816ff251f72
