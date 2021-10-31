@@ -1,0 +1,114 @@
+service: image-rec-api
+frameworkVersion: "2"
+
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  apiGateway:
+    shouldStartNameWithService: true
+  logs:
+    restApi: true
+  lambdaHashingVersion: 20201221
+
+  iamRoleStatements:
+    # s3
+    - Effect: Allow
+      Action:
+        - s3:* 
+      # Resource: "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
+      Resource: 
+        Fn::Join:
+            - ''
+            - - 'arn:aws:s3:::'
+              - 'Ref': 'MainBucket'
+              - '/*'
+      # dynamodb
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      # Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.MASTER_TABLE}"
+      Resource:
+        Fn::GetAtt:
+          - MasterTable
+          - Arn
+      # rekognition
+    - Effect: Allow
+      Action:
+        - "rekognition:*"
+      Resource: "*"
+
+  environment:
+    BUCKET_NAME: ${self:custom.BUCKET_NAME}-${self:provider.stage}
+    MASTER_TABLE: ${self:custom.MASTER_TABLE}-${self:provider.stage}
+    REGION_NAME: 'us-east-1'
+
+custom:
+  BUCKET_NAME: ${self:service}-bucket
+  MASTER_TABLE: ${self:service}-master-table
+
+package:
+  exclude:
+    # - node_modules/**
+    - test_cases/**
+    # - package.json
+    # - package-lock.json
+    # - requirements.txt
+    - README.md
+
+functions:
+  upload:
+    handler: functions/upload.upload
+    events:
+      - http:
+          path: /blobs/upload/
+          method: POST
+          cors: true
+
+  label_on_upload:
+    handler: functions/on_upload.label_on_upload
+    events:
+      - s3:
+          bucket: ${self:provider.environment.BUCKET_NAME}
+          event: s3:ObjectCreated:Put
+          existing: true
+
+  get_labels:
+    handler: functions/get_labels.get_labels
+    events:
+      - http:
+          path: /blobs/{blob_id}
+          method: get
+          cors: true
+  
+resources:
+  Resources:
+    MainBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.BUCKET_NAME}       
+    MasterTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: blob_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: blob_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.MASTER_TABLE}
+    
+
+
+# plugins:
+#   - serverless-python-requirements
