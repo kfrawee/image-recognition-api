@@ -112,8 +112,10 @@ $ curl "https://s3.amazonaws.com/image-rec-api-bucket-dev/20211031155847779721.j
 ## Clean
 To remove Serverless service and all resources:
 
-```
+```yml
 $ serverless remove
+
+Serverless: Stack delete finished...
 ```
 
 ---
