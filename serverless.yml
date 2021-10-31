@@ -14,32 +14,25 @@ provider:
   lambdaHashingVersion: 20201221
 
   iamRoleStatements:
-    # s3
     - Effect: Allow
       Action:
         - s3:* 
-      # Resource: "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
       Resource: 
         Fn::Join:
             - ''
             - - 'arn:aws:s3:::'
               - 'Ref': 'MainBucket'
               - '/*'
-      # dynamodb
     - Effect: Allow
       Action:
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      # Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.MASTER_TABLE}"
       Resource:
         Fn::GetAtt:
           - MasterTable
           - Arn
-      # rekognition
     - Effect: Allow
       Action:
         - "rekognition:*"
@@ -56,11 +49,7 @@ custom:
 
 package:
   exclude:
-    # - node_modules/**
-    - test_cases/**
-    # - package.json
-    # - package-lock.json
-    # - requirements.txt
+    - images/**
     - README.md
 
 functions:
@@ -107,8 +96,3 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.MASTER_TABLE}
-    
-
-
-# plugins:
-#   - serverless-python-requirements
