@@ -33,15 +33,16 @@ def label_on_upload(event, context):
                 image_labels.append(label['Name'].lower())
                 # print(f"Label: {label['Name']}")
 
-            # add results to dynamodb
+            # update labels to dynamodb
             dynamodb = boto3.resource('dynamodb', region_name=region)
-            add_image_date_to_master_table_response = add_image_date_to_master_table(dynamodb=dynamodb,
-                                                                                     blob_id=blob_id,
-                                                                                     labels=image_labels)
-            # print(json.dumps(add_image_date_to_master_table_response))
+
+            update_date_to_master_table_response = update_date_to_master_table(dynamodb=dynamodb,
+                                                                               blob_id=blob_id,
+                                                                               labels=image_labels)
+            # print(json.dumps(update_date_to_master_table_response))
 
             on_upload_ResponseBody = {
-                "addImageDataToMasterTableResponse": add_image_date_to_master_table_response,
+                "updateImageDataToMasterTableResponse": update_date_to_master_table_response,
             }
 
             response = {
@@ -49,8 +50,11 @@ def label_on_upload(event, context):
                 "body": json.dumps(on_upload_ResponseBody)
             }
 
-            # delete image after labeling
         except Exception as e:
+            # delete invalid record from dynamodb
+            delete_date_from_master_table(dynamodb=dynamodb,
+                                          blob_id=blob_id)
+
             response = {
                 "statusCode": 500,
                 "body": json.dumps(str(e))
@@ -58,34 +62,51 @@ def label_on_upload(event, context):
 
         print(response)
 
+        # delete image after labeling
         delete_s3_object(bucket, region, file_name)
         return response
 
 
-def add_image_date_to_master_table(dynamodb, blob_id, labels):
+def update_date_to_master_table(dynamodb, blob_id, labels):
 
     master_table = dynamodb.Table(os.environ['MASTER_TABLE'])
 
-    # data
-    item = {
-        'blob_id': str(blob_id),
-        'labels': labels,
-        'created_on': str(datetime.datetime.now())}
-
     # add image date to table
-    master_table.put_item(Item=item)
+    master_table.update_item(Key={'blob_id': blob_id},
+                             AttributeUpdates={'labels': labels})
 
     # response
     response = {
         "statusCode": 201,
-        "body": json.dumps(item)
+        "body": json.dumps({'blob_id': blob_id,
+                            'labels': labels})
     }
     print(response)
 
     return response
 
 
-# TODO: Delete the object from s3
+def delete_date_from_master_table(dynamodb, blob_id):
+
+    master_table = dynamodb.Table(os.environ['MASTER_TABLE'])
+
+    # add image date to table
+    master_table.delete_item(
+        Key={
+            'blob_id': blob_id
+        }
+    )
+
+    # response
+    response = {
+        "statusCode": 200,
+        "body": json.dumps({'blob_id': blob_id})
+    }
+    print(response)
+
+    return response
+
+
 def delete_s3_object(bucket, region, file_name):
     s3_client = boto3.client('s3', region_name=region)
     s3_client.delete_object(Bucket=bucket, Key=file_name)

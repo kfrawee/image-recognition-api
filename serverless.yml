@@ -29,6 +29,12 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:GetRecords,
+        - dynamodb:GetShardIterator
+        - dynamodb:DescribeStream
+        - dynamodb:ListStreams
       Resource:
         Fn::GetAtt:
           - MasterTable
@@ -59,7 +65,9 @@ functions:
       - http:
           path: /blobs/upload/
           method: POST
-          cors: true
+          request:
+            schemas:
+              application/json: ${file(utils/create_request.json)}
 
   label_on_upload:
     handler: functions/on_upload.label_on_upload
@@ -68,7 +76,13 @@ functions:
           bucket: ${self:provider.environment.BUCKET_NAME}
           event: s3:ObjectCreated:Put
           existing: true
-
+  callback:
+    handler: functions/callback.callback
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [MasterTable, StreamArn]
   get_labels:
     handler: functions/get_labels.get_labels
     events:
@@ -76,6 +90,15 @@ functions:
           path: /blobs/get/{blob_id}
           method: get
           cors: true
+          integration: lambda
+          request:
+            paths:
+              blob_id: true
+              parameters:
+                 paths:
+                   timeout: true
+      
+  
   
 resources:
   Resources:
@@ -88,6 +111,12 @@ resources:
       Properties:
         AttributeDefinitions:
           - AttributeName: blob_id
+            AttributeType: S
+          - AttributeName: labels
+            AttributeType: S
+          - AttributeName: created_on
+            AttributeType: S
+          - AttributeName: callback_url
             AttributeType: S
         KeySchema:
           - AttributeName: blob_id
