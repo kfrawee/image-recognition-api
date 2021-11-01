@@ -2,6 +2,7 @@
 import json
 import datetime
 import boto3
+from boto3.dynamodb.conditions import Key
 import os
 
 
@@ -9,7 +10,9 @@ def label_on_upload(event, context):
     """ send images to aws rekognition and store results to dynamodb """
     bucket = os.environ['BUCKET_NAME']
     region = os.environ['REGION_NAME']
-
+    print(80*'-')
+    print(event)
+    print(80*'-')
     # get file_name
     files_uploaded = event['Records']
     for file in files_uploaded:
@@ -72,8 +75,17 @@ def update_date_to_master_table(dynamodb, blob_id, labels):
     master_table = dynamodb.Table(os.environ['MASTER_TABLE'])
 
     # add image date to table
+
+    # print(80*'-')
+    # print(type(labels))
+    # print(80*'-')
+
     master_table.update_item(Key={'blob_id': blob_id},
-                             AttributeUpdates={'labels': labels})
+                             AttributeUpdates={
+                                 'labels':
+                                 {'Value': labels,
+                                  'Action': 'PUT'}
+    })
 
     # response
     response = {

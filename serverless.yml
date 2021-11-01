@@ -31,14 +31,20 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-        - dynamodb:GetRecords,
-        - dynamodb:GetShardIterator
-        - dynamodb:DescribeStream
-        - dynamodb:ListStreams
       Resource:
         Fn::GetAtt:
           - MasterTable
           - Arn
+    - Effect: Allow
+      Action: 
+        - dynamodb:ListStreams
+        - dynamodb:DescribeTable
+        - dynamodb:UpdateItem
+        - dynamodb:GetItem
+      Resource:
+        Fn::GetAtt:
+          - MasterTable
+          - StreamArn
     - Effect: Allow
       Action:
         - "rekognition:*"
@@ -65,9 +71,7 @@ functions:
       - http:
           path: /blobs/upload/
           method: POST
-          request:
-            schemas:
-              application/json: ${file(utils/create_request.json)}
+
 
   label_on_upload:
     handler: functions/on_upload.label_on_upload
@@ -76,13 +80,22 @@ functions:
           bucket: ${self:provider.environment.BUCKET_NAME}
           event: s3:ObjectCreated:Put
           existing: true
+    
   callback:
     handler: functions/callback.callback
+    dependsOn:
+      - MasterTable
     events:
       - stream:
           type: dynamodb
-          arn:
-            Fn::GetAtt: [MasterTable, StreamArn]
+          batchSize: 100
+          enabled: true
+          arn: 
+            Fn::GetAtt:
+              - MasterTable
+              - StreamArn
+
+
   get_labels:
     handler: functions/get_labels.get_labels
     events:
@@ -92,13 +105,9 @@ functions:
           cors: true
           integration: lambda
           request:
-            paths:
-              blob_id: true
-              parameters:
-                 paths:
-                   timeout: true
-      
-  
+            parameters:
+              paths:
+                blob_id: true
   
 resources:
   Resources:
@@ -112,16 +121,12 @@ resources:
         AttributeDefinitions:
           - AttributeName: blob_id
             AttributeType: S
-          - AttributeName: labels
-            AttributeType: S
-          - AttributeName: created_on
-            AttributeType: S
-          - AttributeName: callback_url
-            AttributeType: S
         KeySchema:
           - AttributeName: blob_id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
         TableName: ${self:provider.environment.MASTER_TABLE}
