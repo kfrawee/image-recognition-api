@@ -1,4 +1,4 @@
-# import requests
+""" Send labels to callback url """
 import json
 import urllib3
 
