@@ -137,5 +137,3 @@ $ serverless remove
 
 Serverless: Stack delete finished...
 ```
-
-
