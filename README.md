@@ -106,13 +106,14 @@ Once the image has been `PUT` to the `upload_url`, it gets stored in an **S3 buc
     <b>Test image: test1.jpeg</b>
     </p>
 
-  - Once uploaded a lambda fuction will be triggered to label the image and store the lables, and send back the labels to your `callback_url` *(if provided)*:
+  - Once uploaded; the image will get labeled and the results will be stored for later queries. Also, the labels will be sent to your `callback_url` *(if provided)*:
 
   <p align="center">
-  <img src="images/readme/webhook_labels.png" title="GET Request" alt="Get Request" width=80%>
+  <img src="images/readme/webhook_labels.png" title="GET Request" alt="Get Request" width=90%><br>
+  <b>Labeling results on callback url</b>
   </p>     
     
-    - You can also query the endpoint using `blob_id` to labels associated to the image by sending a request the `GET` endpoint:
+    - You can also query the endpoint using `blob_id` to get the labels associated to the image; send a request the `GET` endpoint:
     
       ```bash
       curl https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/blobs/get/20211102064424400413
