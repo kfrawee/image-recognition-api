@@ -100,7 +100,7 @@ Once the image has been `PUT` to the `upload_url`, it gets stored in an **S3 buc
     100  113k    0     0  100  113k      0  67758  0:00:01  0:00:01 --:--:-- 67779
     ```
 
-  - Now, the imagehave been uploaded successfully to **S3**.
+  - Now, the image have been uploaded successfully to **S3**.
     <p align="center">
     <img src="images/test_cases/test1.jpeg" title="Test Image" alt="Test Image" width=80%><br>
     <b>Test image: test1.jpeg</b>
