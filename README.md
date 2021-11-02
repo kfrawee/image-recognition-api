@@ -116,7 +116,7 @@ Once the image has been `PUT` to the `upload_url`, it gets stored in an **S3 buc
     - You can also query the endpoint using `blob_id` to get the labels associated to the image; send a request the `GET` endpoint:
     
       ```bash
-      curl https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/blobs/get/20211102064424400413
+      curl https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/images/labels/20211102064424400413
       -H "Accept: application/json" 
       ```
       - Response:
