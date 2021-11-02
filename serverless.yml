@@ -69,7 +69,7 @@ functions:
     handler: functions/upload.upload
     events:
       - http:
-          path: /blobs/upload/
+          path: /images/upload/
           method: POST
 
 
@@ -100,7 +100,7 @@ functions:
     handler: functions/get_labels.get_labels
     events:
       - http:
-          path: /blobs/get/{blob_id}
+          path: /images/labels/{blob_id}
           method: get
           cors: true
           integration: lambda

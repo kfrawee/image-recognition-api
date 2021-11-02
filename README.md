@@ -54,8 +54,8 @@ Once the image has been `PUT` to the `upload_url`, it gets stored in an **S3 buc
   api keys:
     None
   endpoints:
-    POST - https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/blobs/upload
-    GET - https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/blobs/get/{blob_id}
+    POST - https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/images/upload
+    GET - https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/images/labels/{blob_id}
   functions:
     upload: image-rec-api-dev-upload
     label_on_upload: image-rec-api-dev-label_on_upload
@@ -73,7 +73,7 @@ Once the image has been `PUT` to the `upload_url`, it gets stored in an **S3 buc
     - *Provide your `callback` url in request body. You can use [webhook.site](webhook.site) to get free webhook url.*<br><br>
     
     ```sh
-    curl -X POST https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/blobs/upload
+    curl -X POST https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/images/upload
     -H 'Content-Type: application/json'
     -d '{"callback_url":"https://webhook.site/53919b2d-7d8d-4ad8-ba6a-5929d38ae711"}'
     ```
@@ -96,7 +96,7 @@ Once the image has been `PUT` to the `upload_url`, it gets stored in an **S3 buc
     $ curl "https://s3.amazonaws.com/image-rec-api-bucket-dev/20211102064424400413.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAQQUG4IQDLZFZLBWE%2F20211102%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211102T064424Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEH8aCXVzLWVhc3QtMSJHMEUCIEMUsf%2Bt4IBOsM39Mztt%2F3glVe%2FaWMF5Y9swkVF6wRiBAiEAiR4M88dVX1PEAf18LWfJcGb0AtgHS5Q9F64GEMVi3TQqnQIIKBAAGgwwMzU3MTYzNTA5ODIiDALq9j%2Fa765eP6eFfCr6AYIoEvGRrwl7kRnBUDn%2Bxll4xsEiDw2ACQBQz7XOu%2BaCOZhUeDUGwiwR%2FJcg62WAPlArUNMGpwaP9fMk2dphnDog5N1e%2BYRIGONWD1Iw%2BKhcrWtjBXWxg2oB42rWaLOKGpUllwgFS4SJTApSVR6plgX9ryxKJI2dNcie5G9bbwRFA3DOS8Y%2BgC3LUhU2YMju148oBc9qyKcAbh5MXKzWHLE%2FgUR2age76jgJiAqqbkNKj6PPYk9L80kgzc3mOLu0W7f7HWAZVHSQd7CRBIF3bhGE0%2Fe%2F0YE9B411AybmflXE5SnQtK3RtqvVTLQnXFP0OSca1IayjHm4uVswq7yDjAY6mgFhZJyYpKRVYU%2FpxRQ1ickfPlwOAqajJcDEe3ya84JTqoVdBadWmvr2d5KuTFZTg8lG8z%2B35cE7Oe9IBBU32y%2BDaXXiXbrgh9H7B5Q57dBx9%2Fusps7C7YV%2Bm6F4QNp64Gj06oEs0Y4L6wP50hlXWyvtoZRnS1F2d%2BevPg%2BGW%2BHytq%2BmQIpoAsx5PTxiPYe%2BS4NbzpGZc%2Fu45v%2FI&X-Amz-Signature=8b576edcd162789178d6421d5d5b9e36c8f0c0b242b57b079a86ea941f5b07ca" \
     > --upload-file test_cases/test1.jpeg
     % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
+                                   Dload  Upload   Total   Spent    Left  Speed
     100  113k    0     0  100  113k      0  67758  0:00:01  0:00:01 --:--:-- 67779
     ```
 
