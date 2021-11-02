@@ -1,7 +1,6 @@
 service: image-rec-api
 frameworkVersion: "2"
 
-
 provider:
   name: aws
   runtime: python3.8
@@ -16,13 +15,13 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - s3:* 
-      Resource: 
+        - s3:*
+      Resource:
         Fn::Join:
-            - ''
-            - - 'arn:aws:s3:::'
-              - 'Ref': 'MainBucket'
-              - '/*'
+          - ""
+          - - "arn:aws:s3:::"
+            - "Ref": "MainBucket"
+            - "/*"
     - Effect: Allow
       Action:
         - dynamodb:Query
@@ -36,7 +35,7 @@ provider:
           - MasterTable
           - Arn
     - Effect: Allow
-      Action: 
+      Action:
         - dynamodb:ListStreams
         - dynamodb:DescribeTable
         - dynamodb:UpdateItem
@@ -53,7 +52,7 @@ provider:
   environment:
     BUCKET_NAME: ${self:custom.BUCKET_NAME}-${self:provider.stage}
     MASTER_TABLE: ${self:custom.MASTER_TABLE}-${self:provider.stage}
-    REGION_NAME: 'us-east-1'
+    REGION_NAME: "us-east-1"
 
 custom:
   BUCKET_NAME: ${self:service}-bucket
@@ -62,7 +61,7 @@ custom:
 package:
   exclude:
     - images/**
-    - api_definition/**
+    - openapi_definition/**
     - README.md
 
 functions:
@@ -73,7 +72,6 @@ functions:
           path: /images/upload/
           method: POST
 
-
   label_on_upload:
     handler: functions/on_upload.label_on_upload
     events:
@@ -81,7 +79,7 @@ functions:
           bucket: ${self:provider.environment.BUCKET_NAME}
           event: s3:ObjectCreated:Put
           existing: true
-    
+
   callback:
     handler: functions/callback.callback
     dependsOn:
@@ -91,11 +89,10 @@ functions:
           type: dynamodb
           batchSize: 100
           enabled: true
-          arn: 
+          arn:
             Fn::GetAtt:
               - MasterTable
               - StreamArn
-
 
   get_labels:
     handler: functions/get_labels.get_labels
@@ -109,13 +106,13 @@ functions:
             parameters:
               paths:
                 blob_id: true
-  
+
 resources:
   Resources:
     MainBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:provider.environment.BUCKET_NAME}       
+        BucketName: ${self:provider.environment.BUCKET_NAME}
     MasterTable:
       Type: AWS::DynamoDB::Table
       Properties:
