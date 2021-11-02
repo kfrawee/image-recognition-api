@@ -62,6 +62,7 @@ custom:
 package:
   exclude:
     - images/**
+    - api_definition/**
     - README.md
 
 functions:
