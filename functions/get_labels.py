@@ -38,7 +38,7 @@ def get_labels(event, context):
         print(e)
         response = {
             "statusCode": 404,
-            "body": json.dumps("Image not found, Please use a valid blob_id, Or upload a new image")
+            "body": json.dumps("Image not found. Please use a valid blob_id, or maybe you have uploaded an invalid image format")
         }
 
     return response

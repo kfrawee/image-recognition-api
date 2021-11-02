@@ -1,0 +1,121 @@
+openapi: "3.0.2"
+info:
+  title: Image Recognition API ⚡🔎
+  description: A simple API for the recognition of images using AWS Rekognition on the back-end.
+  version: "0.0.1"
+  contact:
+    name: kfrawee
+    url: https://github.com/kfrawee/image-recognition-api
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /images/upload:
+    post:
+      summary: Generate unique upload url and blob id
+      operationId: createUploadurl
+      tags:
+        - images
+      requestBody:
+        description: Add optional callback url
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                callback_url:
+                  type: string
+                  example: https://webhook.site/340b7e5b-1d44-48ec-bf90-eb865e6a8eea
+      responses:
+        "201":
+          description: Null response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blob_id:
+                    type: string
+                    description: The blob id.
+                    example: 20211102064424400413
+                  upload_url:
+                    type: string
+                    description: The upload url
+                    example: https://s3.amazonaws.com/image-rec-api-bucket-dev/XXXX
+                  callback_url:
+                    type: string
+                    description: The callback url
+                    example: https://webhook.site/XXXXXXX-XXXX-XXXX
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+
+  /images/labels/{blob_id}:
+    get:
+      summary: Get labels for image by id
+      operationId: showLabelsById
+      tags:
+        - images
+      parameters:
+        - name: blob_id
+          in: path
+          required: true
+          description: The blob_id of the image to retrieve lables
+          schema:
+            type: number
+            example: 20211102064424400413
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    labels:
+                      type: array
+                example:
+                  - car
+                  - sports car
+                  - coupe
+                  - tire
+                  - wheel
+
+        "404":
+          description: NOT FOUND
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Image not found. Please use a valid blob_id, or maybe you have uploaded an invalid image format
+
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
