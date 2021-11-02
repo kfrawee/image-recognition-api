@@ -32,7 +32,7 @@ def get_labels(event, context):
         print(80*'-')
         response = {
             "statusCode": 200,
-            "body": json.dumps(labels)
+            "body": labels
         }
     except Exception as e:
         print(e)
