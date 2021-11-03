@@ -8,34 +8,28 @@ import os
 def get_labels(event, context):
     bucket = os.environ['BUCKET_NAME']
     region = os.environ['REGION_NAME']
+
     dynamodb = boto3.resource('dynamodb', region_name=region)
     master_table = dynamodb.Table(os.environ['MASTER_TABLE'])
-    # print(80*'-')
-    # print(event)
-    # print(80*'-')
+
     try:
-        print(80*'-')
-        blob_id = event['path']['blob_id']
-        print(blob_id)
-        print(80*'-')
         # get item
+        blob_id = event['path']['blob_id']
         item = master_table.get_item(
             Key={
                 'blob_id': blob_id
             }
         )
 
-        print(80*'-')
-        # print(item)
+        # get labels
         labels = item['Item']['labels']
-        print(labels)
-        print(80*'-')
+
         response = {
             "statusCode": 200,
             "body": labels
         }
+
     except Exception as e:
-        print(e)
         response = {
             "statusCode": 404,
             "body": json.dumps("Image not found. Please use a valid blob_id, or maybe you have uploaded an invalid image format")

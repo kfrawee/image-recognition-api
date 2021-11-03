@@ -4,44 +4,36 @@ import urllib3
 
 
 def get_data(record):
+    """ Parse data from the newImage """
 
-    # Parse newImage and url
+    # Get callback_url
     newImage = record['dynamodb']['NewImage']
-    # print(80*'-')
-    # print(newImage)
-    # print(80*'-')
-
     callback_url = newImage['callback_url']['S']
-    print(callback_url)
 
+    # Get labels
     labels_dict = newImage['labels']['L']
     labels = []
     for l in labels_dict:
         labels.append(l['S'])
 
-    print(labels)
-
     return callback_url, labels
 
 
 def send_labels(url, labels):
+    """ Send labels to the callback url """
     http = urllib3.PoolManager()
-    # check if valid url
-    # print(80*'-')
-    # print(http.request("GET", url).status,
-    #       type(http.request("GET", url).status))
-    # print(80*'-')
+    # check if valid url by sending a get request
+
     if http.request("GET", url).status != 200:
-        body = "Not valid callback url"
+        body = "Invalid callback url"
+
     else:
-        data = labels
+        # send labels
         response = http.request(
             "POST", url,
-            body=json.dumps(data),
+            body=json.dumps(labels),
             headers={'Content-Type': 'application/json'})
-        print(80*'-')
-        print(response.status)
-        print(80*'-')
+
         body = "Labels have been sent successfully"
 
     return {
@@ -50,19 +42,14 @@ def send_labels(url, labels):
 
 
 def callback(event, context):
-    # 1. check ['eventName'] == 'MODIFY'
-    # print(80*'-')
-    # print(event)
-    # print(80*'-')
+    # check ['eventName'] == 'MODIFY'
     try:
         for record in event['Records']:
             if record['eventName'] == 'MODIFY':
                 # get callback_url and labels
                 callback_url, labels = get_data(record)
-                # print(80*'-')
-                # print(callback_url, labels)
-                # print(80*'-')
 
+                # check if callback is available
                 if callback_url:
                     sendLabelsresponsebody = send_labels(callback_url, labels)
                 else:
@@ -70,19 +57,17 @@ def callback(event, context):
 
             else:
                 pass
-        # print('------------------------')
 
         response = {
             "statusCode": 200,
             "body": json.dumps(sendLabelsresponsebody)
         }
-        return response
 
     except Exception as e:
-        print(e)
         responsebody = str(e)
         response = {
             "statusCode": 500,
             "body": json.dumps(responsebody)
         }
-        return response
+
+    return response
