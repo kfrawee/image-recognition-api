@@ -1,0 +1,4 @@
+{
+    "statusCode": 404,
+    "body": "\"Image not found. Please use a valid blob_id, or maybe you have uploaded an invalid image format\""
+}

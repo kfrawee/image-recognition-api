@@ -61,19 +61,22 @@ custom:
 package:
   exclude:
     - images/**
-    - openapi_definition/**
     - test/**
+    - openapi_definition/**
     - README.md
 
 functions:
   upload:
     handler: functions/upload.upload
+    description: Generate unique presigned url and blob_id
     events:
       - http:
           path: /images/upload/
           method: POST
+
   label_on_upload:
     handler: functions/on_upload.label_on_upload
+    description: Send image to Rekognition to detect labels
     events:
       - s3:
           bucket: ${self:provider.environment.BUCKET_NAME}
@@ -82,6 +85,7 @@ functions:
 
   callback:
     handler: functions/callback.callback
+    description: Send detected labels to callback url
     dependsOn:
       - MasterTable
     events:
@@ -96,6 +100,7 @@ functions:
 
   get_labels:
     handler: functions/get_labels.get_labels
+    description: Get labels by blob_id
     events:
       - http:
           path: /images/labels/{blob_id}
@@ -113,6 +118,7 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.BUCKET_NAME}
+
     MasterTable:
       Type: AWS::DynamoDB::Table
       Properties:

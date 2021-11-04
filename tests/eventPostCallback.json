@@ -1,0 +1,113 @@
+{
+    "resource": "/images/upload",
+    "path": "/images/upload",
+    "httpMethod": "POST",
+    "headers": {
+      "Accept": "*/*",
+      "Accept-Encoding": "deflate, gzip",
+      "CloudFront-Forwarded-Proto": "https",
+      "CloudFront-Is-Desktop-Viewer": "true",
+      "CloudFront-Is-Mobile-Viewer": "false",
+      "CloudFront-Is-SmartTV-Viewer": "false",
+      "CloudFront-Is-Tablet-Viewer": "false",
+      "CloudFront-Viewer-Country": "US",
+      "Content-Type": "application/json",
+      "Host": "dykvte2gui.execute-api.us-east-1.amazonaws.com",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36",
+      "Via": "1.1 4c18e6ed879a674305cb5156731cf397.cloudfront.net (CloudFront)",
+      "X-Amz-Cf-Id": "f65lwgaxr1qi2IGSt10mGvK0AoAafd3ao88KU1HfLRVwHmSzLzJF6A==",
+      "X-Amzn-Trace-Id": "Root=1-6183bbba-53d4592d6fda971f2f5c4266",
+      "X-Forwarded-For": "206.189.205.251, 130.176.28.84",
+      "X-Forwarded-Port": "443",
+      "X-Forwarded-Proto": "https"
+    },
+    "multiValueHeaders": {
+      "Accept": [
+        "*/*"
+      ],
+      "Accept-Encoding": [
+        "deflate, gzip"
+      ],
+      "CloudFront-Forwarded-Proto": [
+        "https"
+      ],
+      "CloudFront-Is-Desktop-Viewer": [
+        "true"
+      ],
+      "CloudFront-Is-Mobile-Viewer": [
+        "false"
+      ],
+      "CloudFront-Is-SmartTV-Viewer": [
+        "false"
+      ],
+      "CloudFront-Is-Tablet-Viewer": [
+        "false"
+      ],
+      "CloudFront-Viewer-Country": [
+        "US"
+      ],
+      "Content-Type": [
+        "application/json"
+      ],
+      "Host": [
+        "dykvte2gui.execute-api.us-east-1.amazonaws.com"
+      ],
+      "User-Agent": [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36"
+      ],
+      "Via": [
+        "1.1 4c18e6ed879a674305cb5156731cf397.cloudfront.net (CloudFront)"
+      ],
+      "X-Amz-Cf-Id": [
+        "f65lwgaxr1qi2IGSt10mGvK0AoAafd3ao88KU1HfLRVwHmSzLzJF6A=="
+      ],
+      "X-Amzn-Trace-Id": [
+        "Root=1-6183bbba-53d4592d6fda971f2f5c4266"
+      ],
+      "X-Forwarded-For": [
+        "206.189.205.251, 130.176.28.84"
+      ],
+      "X-Forwarded-Port": [
+        "443"
+      ],
+      "X-Forwarded-Proto": [
+        "https"
+      ]
+    },
+    "queryStringParameters": None,
+    "multiValueQueryStringParameters": None,
+    "pathParameters": None,
+    "stageVariables": None,
+    "requestContext": {
+      "resourceId": "g6mjgi",
+      "resourcePath": "/images/upload",
+      "httpMethod": "POST",
+      "extendedRequestId": "IRpFMEL0IAMFxMg=",
+      "requestTime": "04/Nov/2021:10:53:46 +0000",
+      "path": "/dev/images/upload",
+      "accountId": "035716350982",
+      "protocol": "HTTP/1.1",
+      "stage": "dev",
+      "domainPrefix": "dykvte2gui",
+      "requestTimeEpoch": 1636023226681,
+      "requestId": "b374f049-7523-4997-8bac-8a0d3dee9411",
+      "identity": {
+        "cognitoIdentityPoolId": None,
+        "accountId": None,
+        "cognitoIdentityId": None,
+        "caller": None,
+        "sourceIp": "206.189.205.251",
+        "principalOrgId": None,
+        "accessKey": None,
+        "cognitoAuthenticationType": None,
+        "cognitoAuthenticationProvider": None,
+        "userArn": None,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36",
+        "user": None
+      },
+      "domainName": "dykvte2gui.execute-api.us-east-1.amazonaws.com",
+      "apiId": "dykvte2gui"
+    },
+    "body": "{\n  "callback_url": "https: //webhook.site/53919b2d-7d8d-4ad8-ba6a-5929d38ae711"\n}",
+    "isBase64Encoded": False
+  }
