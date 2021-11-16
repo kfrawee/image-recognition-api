@@ -69,8 +69,8 @@ Once the image has been `PUT` to the `upload_url`, it gets stored in an **S3 buc
 - Now, test the API by uploading an image on S3.<br> 
   >*Using `curl` to send requests or you can use [Postman](https://www.postman.com/) tool or [REQBIN](reqbin.com) to send HTTP requests:*
   
-  - Send a `POST` request to POST endpoint:
-    - *Provide your `callback` url in request body. You can use [webhook.site](webhook.site) to get free webhook url.*<br><br>
+  - Send a `POST` request to the POST endpoint:
+    - *Provide your `callback` url in request body. You can use [webhook.site](https://webhook.site/) to get free webhook url.*<br><br>
     
     ```sh
     curl -X POST https://jok587gh7j.execute-api.us-east-1.amazonaws.com/dev/images/upload
